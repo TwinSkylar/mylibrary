@@ -5,10 +5,11 @@ function Book(title, author, pages, state) {
   this.author = author;
   this.pages = pages;
   this.state = state;
+  this.bookIndex = 0;
 }
 
 function addBookToLibrary(book) {
-  mylibrary.push(book);
+  book.bookIndex = mylibrary.push(book);
   printArray(mylibrary);
 }
 
@@ -51,8 +52,10 @@ function createCard(book) {
   } else {
     readBtn.textContent = "still reading";
   }
-
   removeBtn.textContent = "remove";
+
+  //links the dom object to our array for deletion
+  card.setAttribute("bookIndex", book.bookIndex);
 
   //Add children elements to the card
   card.appendChild(titleDiv);
@@ -60,6 +63,17 @@ function createCard(book) {
   card.appendChild(pageDiv);
   card.appendChild(readBtn);
   card.appendChild(removeBtn);
+
+  /*Adding event listeners to the new buttons created*/
+  removeBtn.addEventListener("click", () => {
+    mylibrary.splice(mylibrary.indexOf(book), 1);
+    printArray(mylibrary);
+  });
+
+  readBtn.addEventListener("click", () => {
+    book.state = !book.state;
+    printArray(mylibrary);
+  });
 
   return card;
 }
@@ -106,6 +120,9 @@ window.onclick = function (event) {
 
 //when the user clicks submit, it will add a book to the array
 const form = document.getElementById("addBookForm");
+form.addEventListener("submit", addBook);
+
+const removeBook = document.getElementById("addBookForm");
 form.addEventListener("submit", addBook);
 
 addBookToLibrary(new Book("Harry Potter", "Rowling", 23, true));
