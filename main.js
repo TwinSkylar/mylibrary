@@ -10,7 +10,6 @@ function Book(title, author, pages, state) {
 function addBookToLibrary(book) {
   mylibrary.push(book);
   printArray(mylibrary);
-  console.log("hit");
 }
 
 Book.prototype.printBook = function () {
@@ -18,19 +17,62 @@ Book.prototype.printBook = function () {
 };
 
 function printArray(library) {
+  const displayCards = document.getElementById("bookContainer");
+  displayCards.replaceChildren();
   library.forEach((element) => {
-    console.log(element.printBook());
+    displayCards.appendChild(createCard(element));
   });
+}
+
+function createCard(book) {
+  //Creates the div elemeents for each book
+  const card = document.createElement("div");
+  const titleDiv = document.createElement("div");
+  const authorDiv = document.createElement("div");
+  const pageDiv = document.createElement("div");
+  const removeBtn = document.createElement("button");
+  const readBtn = document.createElement("button");
+
+  //Adds Classes to each element for styling
+  card.classList.add("bookCard");
+  titleDiv.classList.add("bookTitle");
+  authorDiv.classList.add("bookAuthor");
+  pageDiv.classList.add("bookPages");
+  removeBtn.classList.add("bookState");
+  readBtn.classList.add("readBtn");
+
+  //Provide data to each of the elements
+  titleDiv.textContent = book.title;
+  authorDiv.textContent = book.author;
+  pageDiv.textContent = book.pages;
+
+  if (book.state) {
+    readBtn.textContent = "read";
+  } else {
+    readBtn.textContent = "still reading";
+  }
+
+  removeBtn.textContent = "remove";
+
+  //Add children elements to the card
+  card.appendChild(titleDiv);
+  card.appendChild(authorDiv);
+  card.appendChild(pageDiv);
+  card.appendChild(readBtn);
+  card.appendChild(removeBtn);
+
+  return card;
 }
 
 function addBook(event) {
   event.preventDefault();
+  modal.style.display = "none";
   const form = document.getElementById("addBookForm");
 
   title = form.elements["title"].value;
   author = form.elements["author"].value;
   page = form.elements["pages"].value;
-  state = form.elements["state"].value;
+  state = form.elements["state"].checked;
   const newBook = new Book(title, author, page, state);
   addBookToLibrary(newBook);
   return true;
@@ -65,3 +107,8 @@ window.onclick = function (event) {
 //when the user clicks submit, it will add a book to the array
 const form = document.getElementById("addBookForm");
 form.addEventListener("submit", addBook);
+
+addBookToLibrary(new Book("Harry Potter", "Rowling", 23, true));
+addBookToLibrary(new Book("Green Eggs", "Suess", 23, false));
+addBookToLibrary(new Book("Hitchhikers", "Adams", 23, true));
+addBookToLibrary(new Book("2000 Leagues", "Verne", 23, true));
