@@ -15,14 +15,31 @@ class Book {
     return this._bookIndex;
   }
 
+  set bookIndex(bookIndex) {
+    this._state = state;
+  }
+
   get title() {
     return this._title;
+  }
+  set title(title) {
+    this._state = state;
   }
   get author() {
     return this._author;
   }
+  set author(author) {
+    this._author = author;
+  }
   get pages() {
     return this._pages;
+  }
+  set pages(pages) {
+    this._pages = pages;
+  }
+
+  get state() {
+    return this._state;
   }
   set state(state) {
     this._state = state;
@@ -30,23 +47,23 @@ class Book {
 }
 
 class Library {
+
   constructor() {
-    this.myLibrary = {};
+    this._myLibrary = new Array();
   }
 
   addBookToLibrary(book) {
-    book.index = this._mylibrary.push(book);
+    return this._myLibrary.push(book);
   }
 
   removeBookFromLibrary(book) {
-    _myLibrary.splice(_mylibrary.indexOf(book), 1);
+    this._myLibrary.splice(this._myLibrary.indexOf(book), 1);
   }
 
   get library() {
     return this._myLibrary;
   }
 }
-
 
 const myLibrary = new Library();
 
@@ -123,6 +140,7 @@ function addBook(event) {
   state = form.elements["state"].checked;
   const newBook = new Book(title, author, page, state);
   myLibrary.addBookToLibrary(newBook);
+  displayLibrary();
   return true;
 }
 
@@ -156,11 +174,11 @@ window.onclick = function (event) {
 const form = document.getElementById("addBookForm");
 form.addEventListener("submit", addBook);
 
-const removeBook = document.getElementById("addBookForm");
-form.addEventListener("submit", addBook);
+myLibrary.addBookToLibrary(new Book("Harry Potter", "Rowling", 23, true));
+myLibrary.addBookToLibrary(new Book("Green Eggs", "Suess", 23, false));
+myLibrary.addBookToLibrary(new Book("Hitchhikers", "Adams", 23, true));
+myLibrary.addBookToLibrary(new Book("2000 Leagues", "Verne", 23, true));
 
+console.log (myLibrary.library);
 
-addBookToLibrary(new Book("Harry Potter", "Rowling", 23, true));
-addBookToLibrary(new Book("Green Eggs", "Suess", 23, false));
-addBookToLibrary(new Book("Hitchhikers", "Adams", 23, true));
-addBookToLibrary(new Book("2000 Leagues", "Verne", 23, true));
+displayLibrary();
