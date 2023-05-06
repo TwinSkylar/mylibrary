@@ -1,26 +1,59 @@
-let mylibrary = [];
+class Book {
+  constructor(title, author, pages, state) {
+    this.title = title;
+    this.author = author;
+    this.pages = pages;
+    this.state = state;
+    this.bookIndex = 0;
+  }
 
-function Book(title, author, pages, state) {
-  this.title = title;
-  this.author = author;
-  this.pages = pages;
-  this.state = state;
-  this.bookIndex = 0;
+  printBook() {
+    return this.title + this.author + this.pages + this.state;
+  }
+
+  get bookIndex() {
+    return this._bookIndex;
+  }
+
+  get title() {
+    return this._title;
+  }
+  get author() {
+    return this._author;
+  }
+  get pages() {
+    return this._pages;
+  }
+  set state(state) {
+    this._state = state;
+  }
 }
 
-function addBookToLibrary(book) {
-  book.bookIndex = mylibrary.push(book);
-  printArray(mylibrary);
+class Library {
+  constructor() {
+    this.myLibrary = {};
+  }
+
+  addBookToLibrary(book) {
+    book.index = this._mylibrary.push(book);
+  }
+
+  removeBookFromLibrary(book) {
+    _myLibrary.splice(_mylibrary.indexOf(book), 1);
+  }
+
+  get library() {
+    return this._myLibrary;
+  }
 }
 
-Book.prototype.printBook = function () {
-  return this.title + this.author + this.pages + this.state;
-};
 
-function printArray(library) {
+const myLibrary = new Library();
+
+function displayLibrary() {
   const displayCards = document.getElementById("bookContainer");
   displayCards.replaceChildren();
-  library.forEach((element) => {
+  myLibrary.library.forEach((element) => {
     displayCards.appendChild(createCard(element));
   });
 }
@@ -52,6 +85,7 @@ function createCard(book) {
   } else {
     readBtn.textContent = "still reading";
   }
+
   removeBtn.textContent = "remove";
 
   //links the dom object to our array for deletion
@@ -66,13 +100,13 @@ function createCard(book) {
 
   /*Adding event listeners to the new buttons created*/
   removeBtn.addEventListener("click", () => {
-    mylibrary.splice(mylibrary.indexOf(book), 1);
-    printArray(mylibrary);
+    myLibrary.removeBookFromLibrary(book);
+    displayLibrary();
   });
 
   readBtn.addEventListener("click", () => {
     book.state = !book.state;
-    printArray(mylibrary);
+    displayLibrary();
   });
 
   return card;
@@ -88,7 +122,7 @@ function addBook(event) {
   page = form.elements["pages"].value;
   state = form.elements["state"].checked;
   const newBook = new Book(title, author, page, state);
-  addBookToLibrary(newBook);
+  myLibrary.addBookToLibrary(newBook);
   return true;
 }
 
@@ -124,6 +158,7 @@ form.addEventListener("submit", addBook);
 
 const removeBook = document.getElementById("addBookForm");
 form.addEventListener("submit", addBook);
+
 
 addBookToLibrary(new Book("Harry Potter", "Rowling", 23, true));
 addBookToLibrary(new Book("Green Eggs", "Suess", 23, false));
