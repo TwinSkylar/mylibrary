@@ -1,6 +1,6 @@
 class Book {
   constructor(title, author, pages, state) {
-    this.title = title;
+    this._title = title;
     this.author = author;
     this.pages = pages;
     this.state = state;
@@ -47,7 +47,6 @@ class Book {
 }
 
 class Library {
-
   constructor() {
     this._myLibrary = new Array();
   }
@@ -134,14 +133,30 @@ function addBook(event) {
   modal.style.display = "none";
   const form = document.getElementById("addBookForm");
 
-  title = form.elements["title"].value;
-  author = form.elements["author"].value;
-  page = form.elements["pages"].value;
-  state = form.elements["state"].checked;
+  const title = form.elements.namedItem("title").value;
+  const author = form.elements.namedItem("author").value;
+  const page = form.elements.namedItem("pages").value;
+  const state = form.elements.namedItem("state").checked;
   const newBook = new Book(title, author, page, state);
   myLibrary.addBookToLibrary(newBook);
   displayLibrary();
   return true;
+}
+
+function addValidation(){
+  const title = document.getElementById('title');
+  const author = document.getElementById('author');
+
+title.addEventListener("input",(event)=>{
+  console.log ("starting event");
+  if (!title.validity){
+    console.log ("tooshort");
+    title.setCustomValidity("A book needs a title");
+  }
+  else{
+    title.setCustomValidity("");
+  }
+});
 }
 
 // Get the modal
@@ -179,6 +194,6 @@ myLibrary.addBookToLibrary(new Book("Green Eggs", "Suess", 23, false));
 myLibrary.addBookToLibrary(new Book("Hitchhikers", "Adams", 23, true));
 myLibrary.addBookToLibrary(new Book("2000 Leagues", "Verne", 23, true));
 
-console.log (myLibrary.library);
-
+addValidation();
 displayLibrary();
+
